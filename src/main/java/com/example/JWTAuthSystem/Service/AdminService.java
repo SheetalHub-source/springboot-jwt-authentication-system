@@ -16,7 +16,7 @@ public interface AdminService {
 
     Optional<Admin> findByEmail(String email);
 
-    ResponseEntity<ResponseModel<UserResponseDto>> approveUserActiveStatus(String userEmail, Boolean isApprove);
+    ResponseEntity<ResponseModel<UserResponseDto>> approveUserActiveStatus(String userEmail);
 
     ResponseEntity<ResponseModel<List<AdminResponseDto>>> getAllAdmin();
 

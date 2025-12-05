@@ -20,12 +20,12 @@ public class JwtUtil {
     private final long expiration = 3600000;//300000; // 1 hour
 
     public String generateToken(String username, String role, Boolean isActive) {
-        Map<String,String> claims = new HashMap<>();
+        Map<String, String> claims = new HashMap<>();
         claims.put("role", role);
-       if(isActive!=null) claims.put("isActive",isActive.toString());
+        if (isActive != null) claims.put("isActive", isActive.toString());
         var jwtBuilder = Jwts.builder()
                 .setSubject(username)
-                .header().empty().add("typ","JWT")
+                .header().empty().add("typ", "JWT")
                 .and()
                 .claims(claims)
                 .setIssuedAt(new Date())
@@ -55,14 +55,6 @@ public class JwtUtil {
 
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
-    }
-
-    public String extractRole(String token) {
-        return extractAllClaims(token).get("role", String.class);
-    }
-
-    public Boolean extractIsActive(String token) {
-        return extractAllClaims(token).get("isActive", Boolean.class);
     }
 
     public Claims extractAllClaims(String token) {

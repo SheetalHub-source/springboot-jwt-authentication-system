@@ -40,7 +40,7 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<ResponseModel<BookResponseDto>> createBook(
-           @RequestBody BookRequestDto requestDto,
+            @RequestBody BookRequestDto requestDto,
             @AuthenticationPrincipal UserDetails userDetails) {
         log.info("User {} is creating a book with title '{}'", userDetails.getUsername(), requestDto.getTitle());
         return bookService.createBook(requestDto, userDetails);

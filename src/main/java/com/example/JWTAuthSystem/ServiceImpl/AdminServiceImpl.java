@@ -68,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<ResponseModel<UserResponseDto>> approveUserActiveStatus(String userEmail, Boolean isApprove) {
+    public ResponseEntity<ResponseModel<UserResponseDto>> approveUserActiveStatus(String userEmail) {
         if (!isValid(userEmail)) {
             throw new WrongEmailException("Email format is not valid, Please enter the correct email with correct email format.");
         }
@@ -78,7 +78,7 @@ public class AdminServiceImpl implements AdminService {
                     .body(new ResponseModel<>(null, "User with this email is not present", "Failed", HttpStatus.NOT_FOUND.value()));
         }
         User user = byEmail.get();
-        user.setIsActive(isApprove);
+        user.setIsActive(true);
         User savedUser = userService.save(user).get();
         UserResponseDto data = UserResponseDto.builder()
                 .username(savedUser.getUsername())

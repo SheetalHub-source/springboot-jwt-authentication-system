@@ -4,7 +4,6 @@ import com.example.JWTAuthSystem.Dto.RequestDto.AdminRequestDto;
 import com.example.JWTAuthSystem.Dto.ResponseDto.AdminResponseDto;
 import com.example.JWTAuthSystem.Dto.ResponseDto.ResponseModel;
 import com.example.JWTAuthSystem.Dto.ResponseDto.UserResponseDto;
-import com.example.JWTAuthSystem.ExceptionHandler.ApiException;
 import com.example.JWTAuthSystem.Service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,22 +22,24 @@ public class AdminController {
 
     @PostMapping("/signup")
     public ResponseEntity<ResponseModel<AdminResponseDto>> signUp(@RequestBody AdminRequestDto adminRequestDto) {
-            return adminService.signUp(adminRequestDto);
+        return adminService.signUp(adminRequestDto);
     }
 
     @PatchMapping("/approve")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseModel<UserResponseDto>> approveUser(@RequestParam String userEmail, @RequestParam Boolean isApprove) {
-          return adminService.approveUserActiveStatus(userEmail,isApprove);
-        }
-        @GetMapping
-        public ResponseEntity<ResponseModel<List<AdminResponseDto>>> getAllAdmin(){
-            return adminService.getAllAdmin();
-        }
-        @GetMapping("/{email}")
-        public ResponseEntity<ResponseModel<AdminResponseDto>> getAdminByEmail(@PathVariable String email){
-            return adminService.getAdminByEmail(email);
-        }
-
+    public ResponseEntity<ResponseModel<UserResponseDto>> approveUser(@RequestParam String userEmail) {
+        return adminService.approveUserActiveStatus(userEmail);
     }
+
+    @GetMapping
+    public ResponseEntity<ResponseModel<List<AdminResponseDto>>> getAllAdmin() {
+        return adminService.getAllAdmin();
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<ResponseModel<AdminResponseDto>> getAdminByEmail(@PathVariable String email) {
+        return adminService.getAdminByEmail(email);
+    }
+
+}
 

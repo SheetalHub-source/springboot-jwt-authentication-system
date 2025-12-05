@@ -15,10 +15,12 @@ import java.util.Optional;
 public class CustomeUserDetailsService implements UserDetailsService {
     private final UserDao userDao;
     private final AdminDao adminDao;
+
     public CustomeUserDetailsService(UserDao userDao, AdminDao adminDao) {
         this.adminDao = adminDao;
         this.userDao = userDao;
     }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Admin> admin = adminDao.findByEmail(email);

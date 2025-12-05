@@ -23,4 +23,5 @@ public class Book {
     private String isbn;
     @Column(nullable = false)
     private Double price;
+    private String userMail;
 }

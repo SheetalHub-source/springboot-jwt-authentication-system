@@ -18,21 +18,24 @@ public class SecurityConfig {
     private final CustomeUserDetailsService customeUserDetailsService;
     private final JwtFilter jwtFilter;
 
-    public SecurityConfig(CustomeUserDetailsService customeUserDetailsService,JwtFilter jwtFilter) {
+    public SecurityConfig(CustomeUserDetailsService customeUserDetailsService, JwtFilter jwtFilter) {
         this.customeUserDetailsService = customeUserDetailsService;
-        this.jwtFilter=jwtFilter;
+        this.jwtFilter = jwtFilter;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/login", "/signup", "/user/signup", "/admin/signup").permitAll()
+                        .requestMatchers("/login", "/signup", "/user/signup", "/admin/signup", "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/index.html").permitAll()
 
-                                // 2️⃣ Role-based APIs
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user/**", "/books/**").hasRole("USER")
+                        .requestMatchers("/admin/**", "/user/**").hasRole("ADMIN")
+                        .requestMatchers("/books/**").hasRole("USER")
 
 
                         .anyRequest().authenticated()
@@ -51,8 +54,9 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.JWTAuthSystem.ServiceImpl;
 
+
 import com.example.JWTAuthSystem.Dao.BookDao;
 import com.example.JWTAuthSystem.Dao.UserDao;
 import com.example.JWTAuthSystem.Dto.RequestDto.BookRequestDto;
@@ -75,37 +76,43 @@ public class BookServiceImpl implements BookService {
                 book.getIsbn(),
                 book.getPrice()
         );
-        return ResponseEntity.status(HttpStatus.FOUND).body(new ResponseModel<>(bookResponseDto, "Book Successfully fetched", "Success", HttpStatus.FOUND.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>(bookResponseDto, "Book Successfully fetched", "Success", HttpStatus.OK.value()));
     }
 
 
     @Override
     public ResponseEntity<ResponseModel<BookResponseDto>> createBook(BookRequestDto bookRequestDto, UserDetails userDetails) {
-        if (!isApproveUser(userDetails)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseModel<>(null, "User is not approved can't access this api", "Failed", HttpStatus.UNAUTHORIZED.value()));
+        try {
+            if (!isApproveUser(userDetails)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseModel<>(null, "User is not approved can't access this api", "Failed", HttpStatus.UNAUTHORIZED.value()));
+            }
+
+            Book book = new Book();
+            book.setTitle(bookRequestDto.getTitle());
+            book.setAuthor(bookRequestDto.getAuthor());
+            book.setIsbn(bookRequestDto.getIsbn());
+            book.setPrice(bookRequestDto.getPrice());
+            book.setUserMail(userDetails.getUsername());
+
+            Book savedBook = bookDao.save(book);
+
+            BookResponseDto bookResponseDto = new BookResponseDto(
+                    savedBook.getId(),
+                    savedBook.getTitle(),
+                    savedBook.getAuthor(),
+                    savedBook.getIsbn(),
+                    savedBook.getPrice()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseModel<>(
+                            bookResponseDto,
+                            "Book created Successfully",
+                            "Success",
+                            HttpStatus.CREATED.value()
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseModel<>(null, e.getMessage(), "Failed", HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
-        Book book = new Book();
-        book.setTitle(bookRequestDto.getTitle());
-        book.setAuthor(bookRequestDto.getAuthor());
-        book.setIsbn(bookRequestDto.getIsbn());
-        book.setPrice(bookRequestDto.getPrice());
-
-        Book savedBook = bookDao.save(book);
-
-        BookResponseDto bookResponseDto = new BookResponseDto(
-                savedBook.getId(),
-                savedBook.getTitle(),
-                savedBook.getAuthor(),
-                savedBook.getIsbn(),
-                savedBook.getPrice()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseModel<>(
-                        bookResponseDto,
-                        "Book created Successfully",
-                        "Success",
-                        HttpStatus.CREATED.value()
-                ));
     }
 
     @Override
@@ -132,7 +139,7 @@ public class BookServiceImpl implements BookService {
                 updatedBook.getIsbn(),
                 updatedBook.getPrice()
         );
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>(bookResponseDto, "Book Updated successfully", "Succes", HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>(bookResponseDto, "Book Updated successfully", "Success", HttpStatus.OK.value()));
     }
 
     @Override
@@ -146,7 +153,7 @@ public class BookServiceImpl implements BookService {
         }
         Book book = byId.get();
         bookDao.delete(book);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>("Deleted", "Book Deleted successfully", "Succes", HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>("Deleted", "Book Deleted successfully", "Success", HttpStatus.OK.value()));
     }
 
 }

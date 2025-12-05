@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseModel<>(null, "User password is wrong", "Failed", HttpStatus.UNAUTHORIZED.value()));
             }
             String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), user.getIsActive());
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>(token, "Admin Login Successfully", "Success", HttpStatus.OK.value()));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>(token, "User Login Successfully", "Success", HttpStatus.OK.value()));
 
         }
 

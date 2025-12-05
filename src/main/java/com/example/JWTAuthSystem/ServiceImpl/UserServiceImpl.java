@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
             UserResponseDto userResponseDto = new UserResponseDto(user.getUsername(), user.getEmail(), user.getRole(), user.getIsActive());
             responseDtos.add(userResponseDto);
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(new ResponseModel<>(responseDtos, "All Users fetched Successfully", "Success", HttpStatus.FOUND.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel<>(responseDtos, "All Users fetched Successfully", "Success", HttpStatus.FOUND.value()));
     }
 
     @Override
@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole())
                 .isActive(user.getIsActive())
                 .build();
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .body(new ResponseModel<>(data, "User fetched Successfully", "Success", HttpStatus.FOUND.value()));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseModel<>(data, "User fetched Successfully", "Success", HttpStatus.OK.value()));
 
     }
 
